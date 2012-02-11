@@ -1,0 +1,89 @@
+X_MSG readme v0_01
+
+1. Software Overview
+
+What X_MSG does
+It creates a dynamic and affordable many-to-many SMS networks to be used to assist activists in their daily co-ordination.  The system was designed for a London based sex work activist group with the values and desires of sex workers in mind, but it should be deployable in other contexts.
+
+It’s main features are as follows:
+- Messages can be sent to networks of users for the price of a single message.
+- All users are anonymous to each other, without even a username.
+- System messages can be configured in a variety of languages
+- Any person can join the system if they have knowledge of its phone number and the system protocol.
+- Any user can create a new network, using a simple protocol.
+- Users cannot see what other networks exist.  If they know the name of another network they will be able to join it.
+
+How it works
+It operates by exploiting a mobile phone with an “unlimited” text message deal.  The phone is connected to a computer, upon which sits an assemblage of software which acts as a server for incoming messages, redirecting them to users according to its protocol and the information stored in its database. This setup has allowed us to operate the system at a cost of £5 per month for phone charges, plus the electricity cost of running the computer.  It is suited for small to medium sized groups with limited resources.
+
+What is required
+Hardware:
+- PC with a linux based operating system installed. (It may also work with Macs, but we have yet to test this)
+- Mobile phone with an “unlimited” text message contract.  Must be compatible with Gnokii and Gammu (see below)
+- USB cable appropriate to the model of phone.
+
+Software:
+- Gammu (http://wammu.eu/gammu)
+- Gnokii (http://www.gnokii.org)
+- MySQL database (http://www.mysql.org)
+- X-msg server software (a collection of Perl scripts) 
+
+Know-how:
+- Confidence with installing and configuring programs in Linux. (Gnokii in particular may require the manual editing of config files, and a certain amount of trial and error!)
+- Basic familiarity with the Linux command line.
+- Basic familiarity with MySQL.
+
+Familiarity with the Perl programming language is a big plus, but it is not essential.
+
+
+
+2. Setting up the software
+
+First download all software elements to a single directory.  
+
+If you don't have them already, you will then need to install Gnokii, Gammu and MySQL on your system.  Please visit the respective websites for instructions on how to do this:
+Gnokii - http://www.gnokii.org
+Gammu - http://wammu.eu/gammu
+MySQL - http://www.mysql.org
+
+Gnokii and Gammu will need to be configured to the model of the mobile phone you plan to use.  It is worth checking the compatibility lists on their websites before acquiring the mobile phone for this system.
+
+Once these elements are installed, you will need to configure the database.  Log into MySQL and enter the following command:
+
+create database xmsg;
+
+Keep xmsg in small case.  This database will contain all the phone numbers of the people using the system, so make sure it is secure, and only that only those who need to have access to it can access it.  Once is done, log out of MySQL and run the perl script 'xmsg_dbsetup.pl' from the command line. (You do this by entering the directory where the script is located in the terminal window, and then entering: perl xmsg_dbsetup.pl)  Enter your MySQL username and password - the script will then set up the tables in the database that the software will use.
+
+x_msg will then be ready to run.  Connect the phone to the computer, and enter 'gnokii --identify' from the command line to check the phone is detected.  If this has worked correctly, it should display information about the phone.  Then, to start x_msg, run the perl script 'xmsg_go.pl'.  It will ask for your MySQL username and password.  Enter this, and the system will start running.
+
+
+
+3. Using the system from your mobile phone
+
+Once you have set the system running, you can issue commands to it by texting them to the mobile phone connected to the system.  The commands are below:
+
+To subscribe:
+Send an SMS to the mobile connected to the system, starting the SMS with an @ followed by the name of the network, e.g. @net. 
+
+To send an SMS to the network:
+Always begin your SMS with @ followed by the name of the network, e.g. @net. Then put a space and your message, e.g. @net Hello. 
+
+To set your languages:*
+For a network: Text @nameofnetwork followed by a #  and the native name of your language, eg. @net#polski  This changes an existing networks system language - it doesn’t create a new network.  
+
+For a user: To change your default language, text # followed by the native name of your language e.g. #polski
+
+To create a new network:
+Send an SMS starting the SMS with an @ followed by the name you wish to give to the network, e.g. @social. If the network does not already exist, a new network will be created.   
+
+To refresh memberships:
+Send a text beginning with the symbol % - or just send a message to any network.
+
+To leave a network:
+Text  & followed by the name of the nework you wish to leave, eg. &net.
+
+*Languages currently supported - Portuguese, English, Spanish, Polish, French
+
+
+4. Configuring and administrating the system
+Running the perl script xmsg_config.pl will allow you a couple of options for those unfamiliar with MySQL.  It will allow you to search for particular numbers in the system and remove them.  It will also allow you to change your MySQL password.  Further features will be added here at a later point.
